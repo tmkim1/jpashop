@@ -51,3 +51,7 @@ Controller -> Service -> Repository -> DB
 - @RunWith(SpringRunner.class): 스프링과 테스트 통합 잔행 
 - @SpringBootTest: 스프링 부트 띄우고 테스트(이게 없으면 @Autowired 실패 발생)
 - @Transactional: 반복 가능한 테스트 지원, 각각의 테스트를 실행할 때마다 트랜잭션을 시작하고 테스트가 끝나면 트랜잭션을 강제로 롤백
+
+---------
+
+참조: 실전! 스프링 부트와 JPA 활용1 (인프런 김영한님의 강의)
