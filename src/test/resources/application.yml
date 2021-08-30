@@ -1,4 +1,8 @@
 spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
 #  해당 datasource, jpa 설정(line 3 ~ 15)을 주석 처리 해도 Spring Boot가 기본적으로 메모리 DB로 수행하게 돼 있음.
 #  datasource:
 #    url: jdbc:h2:mem:test
