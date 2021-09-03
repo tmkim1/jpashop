@@ -52,6 +52,23 @@ Controller -> Service -> Repository -> DB
 - @SpringBootTest: 스프링 부트 띄우고 테스트(이게 없으면 @Autowired 실패 발생)
 - @Transactional: 반복 가능한 테스트 지원, 각각의 테스트를 실행할 때마다 트랜잭션을 시작하고 테스트가 끝나면 트랜잭션을 강제로 롤백
 
+<b> [변경감지와 병합] </b>
+
+- 준영속 엔티티 
+  - 영속성 컨텍스트가 더는 관리하지 않는 엔티티 
+- Update 
+  - jpa merge 사용 X -> 모든 속성이 변경 되기 때문에 null로 업데이트 할 위험 요인 존재
+  - 변경 감지를 사용 O
+    - 변경 감지는 트랜잭션 커밋 시점에 실행 됨
+    - 트랜잭션이 있는 서비스 계층에 식별자와 변경할 데이터를 명확하게 전달
+    - 트랜잭션이 있는 서비스 계층에서 영속 상태의 엔티티를 조회하고, 엔티티의 데이터를 직접 변경 
+    ``` JAVA
+    @Transactional
+      public void updateItem(Long id, String name, int price) {
+        Item item = itemRepository.findOne(id); 
+        item.changeInfo(name, price); 
+    }
+    ``` 
 ---------
 
 참조: 실전! 스프링 부트와 JPA 활용1 (인프런 김영한님의 강의)
