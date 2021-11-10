@@ -7,10 +7,10 @@ Spring Boot와 JPA 활용 Study
 - 엔티티에는 가급적 Setter를 사용하지 말자
   - Setter가 모두 열려있는 경우, 변경 포인트가 많아 유지보수가 어려움. 
   
-- 모든 연관관계는 지연로딩으로 설정! 
-  - 즉시로딩(EAGER)은 예측이 어렵고, 어떤 SQL이 실행될지 추적하기 어려움. 
+- 모든 연관 관계는 지연 로딩으로 설정! 
+  - 즉시 로딩 (EAGER)은 예측이 어렵고, 어떤 SQL이 실행될지 추적하기 어려움. 
   - 특히 JPQL을 실행할 때 N+1 문제가 자주 발생 
-  - 실무 -> 모든 연관관계 지연로딩(LAZY)로 설정
+  - 실무 -> 모든 연관관계 지연로딩 (LAZY)로 설정
   - 연관된 엔티티를 함께 DB에서 조해해야 하면, "fetch join" 또는 "엔티티 그래프 기능"을 사용한다.
   - @XToOne(OneToOne, ManyToOne)관계는 기본이 즉시 로딩이므로 직접 지연 로딩으로 설정 
   
@@ -28,14 +28,14 @@ Controller -> Service -> Repository -> DB
   - repository: JPA 직접 사용, 엔티티 매니저 활용 
   - domain: 엔티티가 모여 있는 계층 (모든 계층에서 사용) ex: User, Order, Category 등등 
 
-- 개발 순서: Service, Repository 게층을 개발하고, 테스트 케이스를 작성해서 검증한 후, 마지막 웹 계층 적용 
+- 개발 순서: Service, Repository 계층을 개발하고, 테스트 케이스를 작성해서 검증한 후, 마지막 웹 계층 적용 
 
 <b> [Spring Boot 기술 설명] </b>
 - @Repository: 스프링 빈으로 등록, JPA예외를 스프링 기반 예외로 변환 
 - @PersistenceContext: 엔티티 매니저(EntityManager) 주입 
 - @PersistenceUnit: 엔티티 매니저 팩토리 주입 
 - @Transactional: 트랜잭션, 영속성 컨텍스트
-  - readonly=true: 데이터의 변경이 없는 읽기 전용 메서드에 사용, 영속성 컨텍스트를 플러시 하지 않으므로 약간의 성능 향상 
+  - readonly = true: 데이터의 변경이 없는 읽기 전용 메서드에 사용, 영속성 컨텍스트를 플러시 하지 않으므로 약간의 성능 향상 
 - @NoArgsConstructor: 파라미터가 없는 생성자를 생성한다. 
   - (access = AccessLevel.PROTECTED): 해당 설정을 통해 접근 제한을 설정하여 생성자를 통한 초기화를 막을 수 있다. 
 
