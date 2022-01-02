@@ -41,4 +41,12 @@ public class MemberService {
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
     }
+
+    @Transactional
+    public void update(long id, String name) {
+        //영속성 컨텍스트에서 해당 멤버를 가져온다.
+        Member member = memberRepository.findOne(id);
+        //영속 상태에 있는 멤버의 이름을 변경 => @Transactional을 통해, AOP 트랜잭션 커밋이 수행 됨 (변경 감지 적용)
+        member.setName(name);
+    }
 }

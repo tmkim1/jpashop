@@ -15,8 +15,9 @@ import static javax.persistence.FetchType.*;
 @Getter @Setter
 public class Category {
 
-    @Id @GeneratedValue
-    @Column (name = "category_id")
+    @Id
+    @GeneratedValue
+    @Column(name = "category_id")
     public Long id;
 
     public String name;
@@ -39,7 +40,4 @@ public class Category {
         this.child.add(child);
         child.setParent(this);
     }
-
-
-
 }
