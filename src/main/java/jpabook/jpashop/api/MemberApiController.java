@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,6 +38,35 @@ public class MemberApiController {
         memberService.update(id, request.getName());
         Member findMember = memberService.findOne(id);
         return new UpdateMemberResponse(findMember.getId(), findMember.getName());
+    }
+
+    //엔티티를 반환하게 되면 유연성이 떨어진다.
+    @GetMapping("api/v1/members")
+    public List<Member> membersV1() {
+        return memberService.findMembers();
+    }
+
+    @GetMapping("api/v2/members")
+    public Result membersV2() {
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDto> members = findMembers.stream()
+                .map( m -> new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+        return new Result(members.size(), members);
+    }
+
+    //API는 필요한 값만 반환 -> API Spec과 동일해야 함
+    @Data
+    @AllArgsConstructor
+    public class Result<T> {
+        private int count;
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public class MemberDto {
+        private String name;
     }
 
     @Data
