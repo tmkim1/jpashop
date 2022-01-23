@@ -59,6 +59,14 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
     /**
      * 실무에서는 복잡해진 쿼리를 queryDSL로 처리하면 됨
      * @return
