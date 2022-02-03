@@ -5,6 +5,8 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.query.OrderFlatDto;
+import jpabook.jpashop.repository.order.query.OrderItemQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryRepository;
 import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * xToOne(ManyToOne, OneToOne)에서의 최적화
@@ -43,8 +47,8 @@ public class OrderSimpleApiController {
     public List<SimpleOrderDto> orderV2() {
         List<Order> orders = orderRepository.findAll(new OrderSearch());
         List<SimpleOrderDto> result = orders.stream()
-                                            .map(o -> new SimpleOrderDto(o))
-                                            .collect(Collectors.toList());
+                .map(o -> new SimpleOrderDto(o))
+                .collect(toList());
         return result;
     }
 
@@ -53,7 +57,7 @@ public class OrderSimpleApiController {
         List<Order> orders = orderRepository.findAllWithMemberDelivery();
         List<SimpleOrderDto> result = orders.stream()
                 .map(o -> new SimpleOrderDto(o))
-                .collect(Collectors.toList());
+                .collect(toList());
         return result;
     }
 
@@ -67,20 +71,19 @@ public class OrderSimpleApiController {
         return orderQueryRepository.findAllByDto_optimization();
     }
 
-    @Data
-    static class SimpleOrderDto {
-        private Long orderId;
-        private String name;
-        private LocalDateTime orderDate;
-        private OrderStatus orderStatus;
-        private Address address;
+    @GetMapping("/api/v6/orders")
+    public List<OrderQueryDto> ordersV6() {
+        List<OrderFlatDto> flats = orderQueryRepository.findAllByDto_flat();
 
-        public SimpleOrderDto(Order order) {
-            this.orderId = order.getId();
-            this.name = order.getMember().getName(); //Lazy 초기화
-            this.orderDate = order.getOrderDate();
-            this.orderStatus = order.getStatus();
-            this.address = order.getDelivery().getAddress(); //Lazy 초기화
-        }
+        return flats.stream()
+                .collect(groupingBy(o -> new OrderQueryDto(o.getOrderId(),
+                                o.getName(), o.getOrderDate(), o.getOrderStatus(), o.getAddress()),
+                        mapping(o -> new OrderItemQueryDto(o.getOrderId(),
+                                o.getItemName(), o.getOrderPrice(), o.getCount()), toList())
+                )).entrySet().stream()
+                .map(e -> new OrderQueryDto(e.getKey().getOrderId(),
+                        e.getKey().getName(), e.getKey().getOrderDate(), e.getKey().getOrderStatus(),
+                        e.getKey().getAddress(), e.getValue()))
+                .collect(toList());
     }
 }
