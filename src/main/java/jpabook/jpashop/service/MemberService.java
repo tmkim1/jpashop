@@ -2,9 +2,8 @@ package jpabook.jpashop.service;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
-import lombok.AllArgsConstructor;
+import jpabook.jpashop.repository.MemberRepositoryOld;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,13 +38,13 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     @Transactional
     public void update(long id, String name) {
         //영속성 컨텍스트에서 해당 멤버를 가져온다.
-        Member member = memberRepository.findOne(id);
+        Member member = memberRepository.findById(id).get();
         //영속 상태에 있는 멤버의 이름을 변경 => @Transactional을 통해, AOP 트랜잭션 커밋이 수행 됨 (변경 감지 적용)
         member.setName(name);
     }
