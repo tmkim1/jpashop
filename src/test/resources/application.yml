@@ -4,19 +4,19 @@ spring:
     suffix: .html
 
 #  해당 datasource, jpa 설정(line 3 ~ 15)을 주석 처리 해도 Spring Boot가 기본적으로 메모리 DB로 수행하게 돼 있음.
-#  datasource:
-#    url: jdbc:h2:mem:test
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    properties:
-#      hibernate:
-#  #      show-sql: true
-#        format_sql: true
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+  #      show-sql: true
+        format_sql: true
 
 
 logging:
